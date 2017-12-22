@@ -1,12 +1,17 @@
 import networkx as nx
 from scipy.sparse import diags
+from Graphs import RK
 
 def main():
 	
 	G = nx.Graph()
 	# Intergers 0,1,2,3,4 are node ids. They can be replaced by other identifiers such as names
-	G.add_nodes_from([(0,{'coord_x': 0.0}),(1,{'coord_x': 0.1}),(2,{'coord_x': 0.2}),
-	                  (3,{'coord_x': 0.3}),(4,{'coord_x': 0.4})])
+	G.add_nodes_from([(0,{'coord_x': 0.0,'coord_y': 0.0, 'sm': True, 'power':10, 'inertia':0.4, 'damping':0.04}),
+	                  (1,{'coord_x': 0.1,'coord_y': 0.1, 'sm': True, 'power':10, 'damping':0.11}),
+	                  (2,{'coord_x': 0.2,'coord_y': 0.2, 'sm': True, 'power':10, 'damping':0.33}),
+	                  (3,{'coord_x': 0.3,'coord_y': 0.3, 'sm': True, 'power':10, 'inertia':0.9, 'damping':0.09}),
+	                  (4,{'coord_x': 0.4,'coord_y': 0.4, 'sm': True, 'power':10, 'inertia':1.4, 'damping':0.14})])
+	
 	G.add_edges_from([(0,1,{'weight':2}),(0,2,{'weight':1}),(0,3,{'weight':7}),(1,2,{'weight':3}),
 	                  (2,3,{'weight':4}),(3,4,{'weight':1})])
 	
@@ -15,14 +20,17 @@ def main():
 	print "Nodes", type(G.nodes())
 	print "Edges", G.edges()
 
-
+	print "Sync Machines id", filter(lambda n: G.nodes[n]['sm']==True, G.nodes)
+	load_id = filter(lambda n: G.nodes[n]['sm']==False, G.nodes)
+	print "Load id", load_id
+	print "Load dampings", [G.nodes[n]['damping'] for n in load_id]
+	
 	print "Node positions", [G.nodes[n]['coord_x'] for n in G.nodes]
 	print "Node positions", map(lambda n: G.nodes[n]['coord_x'], G.nodes)
 	
 	
-	
 	# Incidence in R^(|nodes| x |edges|), column ordering is produced by G.edges
-	"""
+	
 	I = nx.linalg.graphmatrix.incidence_matrix(G, oriented = True)
 	print(type(I))
 	print(type(I.transpose()))
@@ -38,6 +46,7 @@ def main():
 	print((I*I.transpose()).todense())
 	print("Weighted Laplacian")
 	print((I*diags(e_w)*I.transpose()).todense())
-	"""
+	
+	
 if __name__ == '__main__':
 	main()
