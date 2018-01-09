@@ -1,6 +1,6 @@
 import networkx as nx
 from scipy.sparse import diags
-
+import matplotlib.pyplot as plt
 
 def main():
 	
@@ -45,6 +45,7 @@ def main():
 	print("Weighted Laplacian")
 	print((I*diags(e_w)*I.transpose()).todense())
 	
-	
+	nx.draw_networkx_labels(G)
+	plt.show()
 if __name__ == '__main__':
 	main()

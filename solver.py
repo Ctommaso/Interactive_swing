@@ -1,4 +1,5 @@
 import numpy as np
+import threading, time
 
 class Simulator():
 	
@@ -13,18 +14,18 @@ class Simulator():
 	def __init__(self, el_network, time_integrator , max_iter = 1e6, time_step = 1e-2, paused = True):
 		self.max_iter = max_iter
 		self.time_integrator = time_integrator
-		self.paused = paused
+		self.run = threading.Event()
 		self.el_network = el_network
 		self.time_step = time_step
 		
 
-	def start(self):
-		print('started sim')
-		self.paused = False
-		return self.time_integrator(self.el_network, self.max_iter, self.time_step, self.paused)
+	def my_start(self, word, queue):
+		print('started sim' + word)
+		self.run.set()
+		return self.time_integrator(self.el_network, self.max_iter, self.time_step, self.run, queue)
 
 
-def RK(el_network, max_iter, time_step, paused):
+def RK(el_network, max_iter, time_step, run, queue):
 	
 	print('welcome to RK')
 	
@@ -34,13 +35,11 @@ def RK(el_network, max_iter, time_step, paused):
 	rk_state = np.concatenate((state.phase, state.frequency[sm_id]))
 	
 	step = 0
-	sol_T = []
-	sol_F = []
-	while(step < max_iter and paused == False):
+	
+	while(step < max_iter and run.is_set()):
 		
-		sol_T.append(rk_state[0:nb_nodes])
-		sol_F.append(rk_state[nb_nodes:])
-		
+		queue.put([step * time_step, rk_state[0:nb_nodes], rk_state[nb_nodes:]])
+			
 		# 4th order Runge Kutta (1st order DE)
 		k1 = time_step * swing_eq(rk_state, el_network)
 		k2 = time_step * swing_eq(rk_state + k1/2., el_network)
@@ -49,8 +48,7 @@ def RK(el_network, max_iter, time_step, paused):
 
 		rk_state = rk_state + (k1 + 2 * k2 + 2* k3 + k4) / 6.
 		step += 1
-		
-	return sol_T, sol_F
+		#time.sleep(0.01)
 		
 		
 def swing_eq(rk_state, el_network):
@@ -115,14 +113,14 @@ def swing_eq2(phase, freq, el_network):
 	return (-D_sm * freq + delta_P) / M_sm
 
 
-def RK2(el_network, max_iter, time_step, paused):
+def RK2(el_network, max_iter, time_step, run):
 	
 	print('welcome to RK 2')
 	
 	step = 0
 	sol_T = []
 	sol_F = []
-	while(step < max_iter and paused == False):
+	while(step < max_iter and run.is_set()):
 		
 		s = el_network.state
 		sol_T.append(s.phase)
