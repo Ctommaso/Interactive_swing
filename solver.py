@@ -38,6 +38,9 @@ def RK(el_network, max_iter, time_step, paused):
 	sol_F = []
 	while(step < max_iter and paused == False):
 		
+		sol_T.append(rk_state[0:nb_nodes])
+		sol_F.append(rk_state[nb_nodes:])
+		
 		# 4th order Runge Kutta (1st order DE)
 		k1 = time_step * swing_eq(rk_state, el_network)
 		k2 = time_step * swing_eq(rk_state + k1/2., el_network)
@@ -45,9 +48,8 @@ def RK(el_network, max_iter, time_step, paused):
 		k4 = time_step * swing_eq(rk_state + k3, el_network)
 
 		rk_state = rk_state + (k1 + 2 * k2 + 2* k3 + k4) / 6.
-		sol_T.append(rk_state[0:nb_nodes])
-		sol_F.append(rk_state[nb_nodes:])
 		step += 1
+		
 	return sol_T, sol_F
 		
 		
@@ -71,7 +73,7 @@ def swing_eq(rk_state, el_network):
 	# incidence matrix, and edge susceptances constructed from the node ordering 
 	I = getattr(el_network, 'incidence')
 	susc = getattr(el_network, 'edge_susc')
-
+	
 	# Power imbalance, rk_state = [theta, frequency_sm], with:
 	# theta ordered according to node ordering
 	# frequency_sm ordered according to sm_id
@@ -123,6 +125,8 @@ def RK2(el_network, max_iter, time_step, paused):
 	while(step < max_iter and paused == False):
 		
 		s = el_network.state
+		sol_T.append(s.phase)
+		sol_F.append(s.frequency)
 		
 		# 4th order Runge Kutta (2nd order DE)
 		k1 = swing_eq2(s.phase, s.frequency, el_network)
@@ -133,9 +137,7 @@ def RK2(el_network, max_iter, time_step, paused):
 		s.frequency = s.frequency + time_step * (k1 + 2*k2 + 2*k3 + k4)/6.
 		s.phase = s.phase + s.frequency * time_step + (time_step**2)/6.*(k1 + k2 + k3)
 		
-		el_network.state = s
-		sol_T.append(s.phase)
-		sol_F.append(s.frequency)
+		el_network.state = s	
 		step += 1
 		
 	return sol_T, sol_F

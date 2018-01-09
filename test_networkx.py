@@ -17,7 +17,6 @@ def main():
 	
 	print "Nodes", G.nodes()
 	print "Number of nodes is {}". format(G.number_of_nodes())
-	print "Nodes", type(G.nodes())
 	print "Edges", G.edges()
 
 	print "Sync Machines id", filter(lambda n: G.nodes[n]['sm']==True, G.nodes)
@@ -27,7 +26,6 @@ def main():
 	
 	print "Node positions", [G.nodes[n]['coord_x'] for n in G.nodes]
 	print "Node positions", map(lambda n: G.nodes[n]['coord_x'], G.nodes)
-	
 	
 	# Incidence in R^(|nodes| x |edges|), column ordering is produced by G.edges
 	
