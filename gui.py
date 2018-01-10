@@ -2,16 +2,30 @@ from pyqtgraph.Qt import QtGui, QtCore
 import numpy as np
 import pyqtgraph as pg
 
-def display(name, q, plot_buffer = 3*1e03):
+# Enable antialiasing for prettier plots
+pg.setConfigOptions(antialias=True)
+
+def display(name, q, el_net, plot_buffer = 3*1e03):
 	app2 = QtGui.QApplication([])
 
-	win2 = pg.GraphicsWindow(title="Basic plotting examples")
-	win2.resize(2000,1000)
-	win2.setWindowTitle('Interacting swing dynamics')
-	p_phase = win2.addPlot(title="Phase plot", row = 0, col=1)
-	p_freq = win2.addPlot(title="Frequency plot", row = 1, col=1)
-	p_network = win2.addPlot(title="Network", rowspan = 2, col=0)
+	win = pg.GraphicsWindow()
+	win.resize(2000,1000)
+	win.setWindowTitle('Interacting swing dynamics')
+	p_phase = win.addPlot(title="Phase plot", row = 0, col=1)
+	p_freq = win.addPlot(title="Frequency plot", row = 1, col=1)
+	p_network = win.addViewBox(rowspan = 2, col=0)
+	
 	print(type(p_network))
+	
+	p_graph = pg.GraphItem()
+	p_network.addItem(p_graph)
+	
+	pos = np.array(el_net.get_coord())
+	adj = np.array([[e[0],e[1]] for e in el_net.graph.edges])
+	symbols = ['s' if el_net.graph.nodes[n]['sm'] else 'o' for n in el_net.graph.nodes]
+	p_graph.setData(pos = pos, adj = adj, size = 20, symbol = symbols, pxMode = True)
+	#p_graph.sigClicked.connect(clicked)
+	
 	curves_phase = [p_phase.plot() for n in range(0,11)]
 	curves_freq = [p_freq.plot() for n in range(0,4)]
 	
@@ -40,3 +54,17 @@ def display(name, q, plot_buffer = 3*1e03):
 	QtGui.QApplication.instance().exec_()
 
 
+
+
+#lastClicked = []
+def clicked(plot, points):
+	print(points)
+	"""
+	global lastClicked
+	for p in lastClicked:
+		p.resetPen()
+	print("clicked points", points)
+	for p in points:
+		p.setPen('b', width=2)
+	lastClicked = points
+	"""

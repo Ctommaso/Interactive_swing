@@ -46,5 +46,5 @@ class Electrical_network():
 
 	def get_coord(self):
 		
-		coord = [(self.graph.nodes[n]['coord_x'],self.graph.nodes[n]['coord_y']) for n in self.graph.nodes]
+		coord = [self.graph.nodes[n]['coord'] for n in self.graph.nodes]
 		return coord
