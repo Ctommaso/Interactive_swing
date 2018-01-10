@@ -5,8 +5,8 @@ import pyqtgraph as pg
 # Enable antialiasing for prettier plots
 pg.setConfigOptions(antialias=True)
 
-def display(name, q, el_net, plot_buffer = 3*1e03):
-	app2 = QtGui.QApplication([])
+def display(q, el_net, plot_buffer = 3*1e03):
+	#app2 = QtGui.QApplication([])
 
 	win = pg.GraphicsWindow()
 	win.resize(2000,1000)

@@ -24,11 +24,9 @@ def main():
 	print "Load id", load_id
 	print "Load dampings", [G.nodes[n]['damping'] for n in load_id]
 	
-	print "Node positions", [G.nodes[n]['coord_x'] for n in G.nodes]
-	print "Node positions", map(lambda n: G.nodes[n]['coord_x'], G.nodes)
+	print "Node positions", map(lambda n: G.nodes[n]['coord'], G.nodes)
 	
 	# Incidence in R^(|nodes| x |edges|), column ordering is produced by G.edges
-	
 	I = nx.linalg.graphmatrix.incidence_matrix(G, oriented = True)
 	print(type(I))
 	print(type(I.transpose()))
@@ -45,7 +43,7 @@ def main():
 	print("Weighted Laplacian")
 	print((I*diags(e_w)*I.transpose()).todense())
 	
-	nx.draw_networkx_labels(G)
+	nx.draw_networkx(G)
 	plt.show()
 if __name__ == '__main__':
 	main()

@@ -41,11 +41,11 @@ def main():
 	s = Simulator(el_net, RK, max_iter = 5000)
 	q = Queue()# Run io function in a thread
 	# Run simulation in a thread
-	t = threading.Thread(target=s.my_start, args=("hello",q))
+	t = threading.Thread(target=s.start, args=(q,))
 	t.start()
 	
 	# Start display process
-	p = Process(target = display, args=('bob',q,el_net,500))
+	p = Process(target = display, args=(q,el_net,500))
 	p.start()
 	
 	t.join()

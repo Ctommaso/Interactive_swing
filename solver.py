@@ -19,8 +19,8 @@ class Simulator():
 		self.time_step = time_step
 		
 
-	def my_start(self, word, queue):
-		print('started sim' + word)
+	def start(self, queue):
+		print('started sim')
 		self.run.set()
 		return self.time_integrator(self.el_network, self.max_iter, self.time_step, self.run, queue)
 

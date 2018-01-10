@@ -37,8 +37,9 @@ def main():
 	print 'Phase', el_net.state.phase
 	print 'Freq', el_net.state.frequency
 
+	"""
 	s = Simulator(el_net, RK, max_iter = 4000)
-	sol_T, sol_F = s.start()	
+	s.start()	
 	
 	print sol_T[-1]
 	print 3*np.sin(sol_T[-1][4]-sol_T[-1][3])
@@ -47,6 +48,6 @@ def main():
 	ax[0].plot(sol_T)
 	ax[1].plot(sol_F)
 	plt.show()
-
+	"""
 if __name__ == '__main__':
 	main()
