@@ -1,8 +1,7 @@
 from graphs import *
 from solver import *
 from gui import *
-from multiprocessing import Process, Queue
-import threading
+from multiprocessing import Process, Queue, Event
 
 
 def main():
@@ -26,7 +25,6 @@ def main():
              (8,9,{'weight':4}),(9,10,{'weight':3})]
 
 	el_net = Electrical_network(buses, lines)
-
 	print 'Power', el_net.P
 	print 'SM id', el_net.sm_id
 	print 'Load id ', el_net.load_id
@@ -37,18 +35,22 @@ def main():
 	
 	print 'Phase', el_net.state.phase
 	print 'Freq', el_net.state.frequency
-
-	s = Simulator(el_net, RK, max_iter = 5000)
-	q = Queue()# Run io function in a thread
-	# Run simulation in a thread
-	t = threading.Thread(target=s.start, args=(q,))
-	t.start()
 	
-	# Start display process
-	p = Process(target = display, args=(q,el_net,500))
-	p.start()
+	# Event for synchrony between threads
+	e = Event()
+	e.set()
 	
-	t.join()
-	p.join()
+	s = Simulator(el_net, RK, max_iter = 3000)
+	
+	# Queue for sharing data between threads
+	q = Queue()
+	
+	# Run simulation in a process, and display in a different process
+	t = Process(target=s.start, args = (q, e))
+	p = Process(target = display, args = (q, el_net, e, 500))
+	
+	t.start() ; p.start()
+	
+	t.join() ; p.join()
 if __name__ == '__main__':
 	main()
