@@ -40,8 +40,7 @@ def RK(el_network, max_iter, time_step, queue, ev):
 		queue.put([step * time_step, rk_state[0:nb_nodes], rk_state[nb_nodes:]])
 		time.sleep(0.1)
 		ev.wait()
-		
-			
+		print("RK step {}".format(step))		
 		# 4th order Runge Kutta (1st order DE)
 		k1 = time_step * swing_eq(rk_state, el_network)
 		k2 = time_step * swing_eq(rk_state + k1/2., el_network)
@@ -68,7 +67,7 @@ def swing_eq(rk_state, el_network):
 	
 	# Vector of injections, ordered according to the node labelling
 	P = getattr(el_network, 'P')
-	
+	print(P)
 	# incidence matrix, and edge susceptances constructed from the node ordering 
 	I = getattr(el_network, 'incidence')
 	susc = getattr(el_network, 'edge_susc')
