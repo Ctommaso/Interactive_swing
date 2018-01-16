@@ -2,6 +2,10 @@ import networkx as nx
 from scipy.sparse import diags
 import matplotlib.pyplot as plt
 
+
+# Script to test basic networkx functions
+
+ 
 def main():
 	
 	G = nx.Graph()

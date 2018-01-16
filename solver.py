@@ -1,6 +1,6 @@
 import numpy as np
-import threading, time
-import multiprocessing
+import time
+
 
 class Simulator():
 	
@@ -18,7 +18,6 @@ class Simulator():
 		self.el_network = el_network
 		self.time_step = time_step
 		
-
 	def start(self, queue, ev):
 		print('started sim')
 		return self.time_integrator(self.el_network, self.max_iter, self.time_step, queue, ev)
@@ -40,7 +39,7 @@ def RK(el_network, max_iter, time_step, queue, ev):
 		queue.put([step * time_step, rk_state[0:nb_nodes], rk_state[nb_nodes:]])
 		time.sleep(0.1)
 		ev.wait()
-		print("RK step {}".format(step))		
+		
 		# 4th order Runge Kutta (1st order DE)
 		k1 = time_step * swing_eq(rk_state, el_network)
 		k2 = time_step * swing_eq(rk_state + k1/2., el_network)
@@ -49,25 +48,27 @@ def RK(el_network, max_iter, time_step, queue, ev):
 
 		rk_state = rk_state + (k1 + 2 * k2 + 2* k3 + k4) / 6.
 		step += 1
-		
-				
-def swing_eq(rk_state, el_network):
 
+	print 'Finised time integration'
+		
+		
+def swing_eq(rk_state, el_network):
+		
 	# sync_machines and load ids
 	sm_id = getattr(el_network, 'sm_id')
 	load_id = getattr(el_network, 'load_id')
 	
 	nb_nodes = el_network.graph.number_of_nodes()
-
+	
 	# Swing equation coefficients
 	# Coefficients are ordered according to sm_id and load_id
-	M_sm = getattr(el_network, 'inertia_sm') 	 # Inertia sync machines
-	D_sm = getattr(el_network, 'damping_sm')	 # Damping sync machines
-	D_load = getattr(el_network, 'damping_load') # Damping loads
+	M_sm = el_network.get_I_sm() # Inertia sync machines
+	D_sm = el_network.get_D_sm() # Damping sync machines
+	D_load = el_network.get_D_load() # Damping loads
 	
 	# Vector of injections, ordered according to the node labelling
-	P = getattr(el_network, 'P')
-	print(P)
+	P = el_network.get_P()
+	
 	# incidence matrix, and edge susceptances constructed from the node ordering 
 	I = getattr(el_network, 'incidence')
 	susc = getattr(el_network, 'edge_susc')
@@ -90,6 +91,7 @@ def swing_eq(rk_state, el_network):
 	return delta_rk_state
 
 
+"""
 def swing_eq2(phase, freq, el_network):
 
 	# Swing equation coefficients
@@ -139,3 +141,4 @@ def RK2(el_network, max_iter, time_step, run):
 		step += 1
 		
 	return sol_T, sol_F
+"""

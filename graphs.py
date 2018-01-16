@@ -27,9 +27,7 @@ class Electrical_network():
 		self.graph.add_nodes_from(buses)
 		self.graph.add_edges_from(lines)
 		self.state = State(self.graph.number_of_nodes()) 
-		
-		self.P = np.array([self.graph.nodes[n]['power'] for n in self.graph.nodes])
-		
+				
 		self.sm_id = filter(lambda n: self.graph.nodes[n]['sm']==True, self.graph.nodes)
 		self.load_id = filter(lambda n: self.graph.nodes[n]['sm']==False, self.graph.nodes)
 
@@ -38,13 +36,25 @@ class Electrical_network():
 		# edge weights, edge ordering is produced by graph.edges
 		self.edge_susc = diags([self.graph[e[0]][e[1]]['weight'] for e in self.graph.edges()])
 
-		# inertia and damping coeffs, ordered according to sm_id and load_id
-		self.inertia_sm = np.array([self.graph.nodes[n]['inertia'] for n in self.sm_id])
-		self.damping_sm = np.array([self.graph.nodes[n]['damping'] for n in self.sm_id])
-		self.damping_load = np.array([self.graph.nodes[n]['damping'] for n in self.load_id])
-
 
 	def get_coord(self):
-		
 		coord = [self.graph.nodes[n]['coord'] for n in self.graph.nodes]
 		return coord
+
+		
+	def get_P(self):
+		return np.array([self.graph.nodes[n]['power'] for n in self.graph.nodes])
+	
+	
+	# inertia and damping coeffs, ordered according to sm_id and load_id
+	def get_I_sm(self):
+		return np.array([self.graph.nodes[n]['inertia'] for n in self.sm_id])
+	
+		
+	def get_D_sm(self):
+		return np.array([self.graph.nodes[n]['damping'] for n in self.sm_id])
+	
+		
+	def get_D_load(self):
+		return np.array([self.graph.nodes[n]['damping'] for n in self.load_id])
+
