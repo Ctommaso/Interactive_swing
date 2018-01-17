@@ -32,7 +32,7 @@ def main():
 	proc_ev.set()
 	
 	# Create simulator istance
-	s = Simulator(el_net, RK, max_iter = 100)
+	s = Simulator(el_net, RK, max_iter = 3000)
 	
 	# Queue for sharing data between threads
 	q = Queue()

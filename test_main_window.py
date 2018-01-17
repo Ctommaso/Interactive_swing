@@ -4,7 +4,6 @@ from graphs import Electrical_network
 from multiprocessing import Event
 from PyQt4.QtGui import *
 
-
 # Script to test the layout of the main window (i.e. MainDisplay object)
 # It also allows to test the response of the network to clicks
 # Clicking opens Dialog windows to edit node and line parameters
@@ -24,13 +23,16 @@ def main():
 	         (9,{'name': "Gen 9",'coord': [0.0, 0.3], 'sm': True, 'power':2.5, 'inertia':7, 'damping':2}),
 	         (10,{'name': "Load 10",'coord': [0.0, 0.35], 'sm': False, 'power':-0.5, 'damping':1.5})]
 	         
-	lines =	[(0,1,{'weight':2}),(0,2,{'weight':1}),(0,3,{'weight':7}),(1,2,{'weight':3}),
-	         (2,3,{'weight':4}),(3,4,{'weight':3}),(1,5,{'weight':3.5}),(2,6,{'weight':4}),
-	         (5,6,{'weight':2}),(0,7,{'weight':4.3}),(7,8,{'weight':3}),(1,8,{'weight':2}),
-             (8,9,{'weight':4}),(9,10,{'weight':3})]
+	lines =	[(0,1,{'susceptance':2.0, 'status':True}),(0,2,{'susceptance':1.0, 'status':True}),(0,3,{'susceptance':7.0, 'status':True}),
+	         (1,2,{'susceptance':3.0, 'status':True}),(2,3,{'susceptance':4.0, 'status':True}),(3,4,{'susceptance':3.0, 'status':True}),
+	         (1,5,{'susceptance':3.5, 'status':True}),(2,6,{'susceptance':4.0, 'status':True}),(5,6,{'susceptance':2.0,'status':True}),
+	         (0,7,{'susceptance':4.3, 'status':True}),(7,8,{'susceptance':3.0, 'status':True}),(1,8,{'susceptance':2.0, 'status':True}),
+             (8,9,{'susceptance':4.0, 'status':True}),(9,10,{'susceptance':3.0, 'status':True})]
 
 	el_net = Electrical_network(buses, lines)
-	
+	print el_net.graph.edges()
+	print el_net.node_coord
+	print el_net.edge_coord
 	proc_ev = Event()
 	proc_ev.set()
 	app = QApplication(sys.argv)

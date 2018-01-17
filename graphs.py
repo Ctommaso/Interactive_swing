@@ -33,14 +33,12 @@ class Electrical_network():
 
 		# unweighted incidence in shape (|nodes| x |edges|), column ordering is produced by graph.edges
 		self.incidence = nx.linalg.graphmatrix.incidence_matrix(self.graph, oriented = True)
-		# edge weights, edge ordering is produced by graph.edges
-		self.edge_susc = diags([self.graph[e[0]][e[1]]['weight'] for e in self.graph.edges()])
+		# edge susceptance, edge ordering is produced by graph.edges
+		self.edge_susc = diags([self.graph[e[0]][e[1]]['susceptance'] for e in self.graph.edges()])
 
-
-	def get_coord(self):
-		coord = [self.graph.nodes[n]['coord'] for n in self.graph.nodes]
-		return coord
-
+		self.node_coord = np.array([self.graph.nodes[n]['coord'] for n in self.graph.nodes])
+		self.edge_coord = np.array([(self.node_coord[e[0]] + self.node_coord[e[1]])/2. for e in self.graph.edges()])
+	
 		
 	def get_P(self):
 		return np.array([self.graph.nodes[n]['power'] for n in self.graph.nodes])

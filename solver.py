@@ -37,7 +37,7 @@ def RK(el_network, max_iter, time_step, queue, ev):
 	while(step < max_iter):
 		
 		queue.put([step * time_step, rk_state[0:nb_nodes], rk_state[nb_nodes:]])
-		time.sleep(0.1)
+		time.sleep(0.05)
 		ev.wait()
 		
 		# 4th order Runge Kutta (1st order DE)
