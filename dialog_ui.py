@@ -96,6 +96,7 @@ class Dialog_edge(QDialog):
 		self.proc_ev = proc_ev
 		self.show()
 	
+	
     # Assign entries to edge properties
 	def button_click(self, edge):
 		edge['status'] = True if self.entry_status.checkState() == 2 else False

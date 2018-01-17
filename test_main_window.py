@@ -30,9 +30,6 @@ def main():
              (8,9,{'susceptance':4.0, 'status':True}),(9,10,{'susceptance':3.0, 'status':True})]
 
 	el_net = Electrical_network(buses, lines)
-	print el_net.graph.edges()
-	print el_net.node_coord
-	print el_net.edge_coord
 	proc_ev = Event()
 	proc_ev.set()
 	app = QApplication(sys.argv)

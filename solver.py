@@ -39,6 +39,7 @@ def RK(el_network, max_iter, time_step, queue, ev):
 		queue.put([step * time_step, rk_state[0:nb_nodes], rk_state[nb_nodes:]])
 		time.sleep(0.05)
 		ev.wait()
+		#print "RK step"
 		
 		# 4th order Runge Kutta (1st order DE)
 		k1 = time_step * swing_eq(rk_state, el_network)
@@ -49,7 +50,7 @@ def RK(el_network, max_iter, time_step, queue, ev):
 		rk_state = rk_state + (k1 + 2 * k2 + 2* k3 + k4) / 6.
 		step += 1
 
-	print 'Finised time integration'
+	print 'Finished time integration'
 		
 		
 def swing_eq(rk_state, el_network):
@@ -71,7 +72,10 @@ def swing_eq(rk_state, el_network):
 	
 	# incidence matrix, and edge susceptances constructed from the node ordering 
 	I = getattr(el_network, 'incidence')
-	susc = getattr(el_network, 'edge_susc')
+	susc = el_network.get_active_susceptance()
+	#print "in swing eq"
+	#print np.diag(susc.todense())
+	#print el_network.graph.edges
 	
 	# Power imbalance, rk_state = [theta, frequency_sm], with:
 	# theta ordered according to node ordering

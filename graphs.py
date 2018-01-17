@@ -33,8 +33,6 @@ class Electrical_network():
 
 		# unweighted incidence in shape (|nodes| x |edges|), column ordering is produced by graph.edges
 		self.incidence = nx.linalg.graphmatrix.incidence_matrix(self.graph, oriented = True)
-		# edge susceptance, edge ordering is produced by graph.edges
-		self.edge_susc = diags([self.graph[e[0]][e[1]]['susceptance'] for e in self.graph.edges()])
 
 		self.node_coord = np.array([self.graph.nodes[n]['coord'] for n in self.graph.nodes])
 		self.edge_coord = np.array([(self.node_coord[e[0]] + self.node_coord[e[1]])/2. for e in self.graph.edges()])
@@ -56,3 +54,7 @@ class Electrical_network():
 	def get_D_load(self):
 		return np.array([self.graph.nodes[n]['damping'] for n in self.load_id])
 
+	
+	# edge susceptance, edge ordering is produced by graph.edges
+	def get_active_susceptance(self):
+		return diags([self.graph[e[0]][e[1]]['susceptance'] * int(self.graph[e[0]][e[1]]['status']) for e in self.graph.edges()])

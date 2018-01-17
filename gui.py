@@ -3,6 +3,7 @@ from PyQt4.QtGui import *
 import pyqtgraph as pg
 import numpy as np
 from graphs import *
+from functools import partial
 from dialog_ui import Dialog_edge, Dialog_node
 
 
@@ -12,7 +13,7 @@ class GuiThread(QThread):
 		self.maindisplay = MainDisplay(el_net, proc_ev)
 		
 	# Real time plotting of phase and frequency time series
-	def display(self, q, proc_ev, plot_buffer = 3*1e03):
+	def display(self, q, proc_ev, plot_buffer = 1*1e03):
 		
 		# number of nodes and number of synchronous machines
 		self.nb_sm = len(self.maindisplay.el_net.sm_id)
@@ -22,8 +23,8 @@ class GuiThread(QThread):
 		self.maindisplay.curves_freq = [self.maindisplay.p_freq.plot() for n in range(self.nb_sm)]
 		
 		self.maindisplay.data_t = np.zeros(int(plot_buffer),dtype=float)
-		self.maindisplay.data_p = np.zeros((int(plot_buffer),11),dtype=float)
-		self.maindisplay.data_f = np.zeros((int(plot_buffer),4),dtype=float)
+		self.maindisplay.data_p = np.zeros((int(plot_buffer), self.nb_nodes),dtype=float)
+		self.maindisplay.data_f = np.zeros((int(plot_buffer), self.nb_sm),dtype=float)
 
 		def updateInProc(self, q):
 			if q.empty():
@@ -65,10 +66,11 @@ class MainDisplay(pg.GraphicsWindow):
 		self.p_freq = self.addPlot(title="Frequency plot", row = 1, col=1)
 	
 		# For faster plotting uncomment the Autorange lines
-		#self.p_phase.disableAutoRange(axis= 'y')
-		#self.p_phase.setYRange(-0.5,0.5)
-		#self.p_freq.disableAutoRange(axis= 'y')
-		#self.p_freq.setYRange(-0.4,0.4)
+		
+		self.p_phase.disableAutoRange(axis= 'y')
+		self.p_phase.setYRange(-1, 1)
+		self.p_freq.disableAutoRange(axis= 'y')
+		self.p_freq.setYRange(-0.4,0.4)
 		
 		self.p_network = self.addViewBox(rowspan = 2, col=0)
 		self.p_graph = LabeledGraph()
