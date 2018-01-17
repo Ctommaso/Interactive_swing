@@ -39,7 +39,7 @@ def RK(el_network, max_iter, time_step, queue, ev):
 		queue.put([step * time_step, rk_state[0:nb_nodes], rk_state[nb_nodes:]])
 		time.sleep(0.05)
 		ev.wait()
-		#print "RK step"
+		#print "RK step", step
 		
 		# 4th order Runge Kutta (1st order DE)
 		k1 = time_step * swing_eq(rk_state, el_network)

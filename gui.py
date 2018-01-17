@@ -39,8 +39,10 @@ class GuiThread(QThread):
 			self.maindisplay.data_p[-1] = item[1]
 			self.maindisplay.data_f[-1] = item[2]
 			
-			map(lambda n: self.maindisplay.curves_phase[n].setData(self.maindisplay.data_t, self.maindisplay.data_p[:,n]), range(self.nb_nodes))
-			map(lambda n: self.maindisplay.curves_freq[n].setData(self.maindisplay.data_t, self.maindisplay.data_f[:,n]), range(self.nb_sm))
+			[self.maindisplay.curves_phase[n].setData(self.maindisplay.data_t, self.maindisplay.data_p[:,n]) for n in range(self.nb_nodes)]
+			[self.maindisplay.curves_freq[n].setData(self.maindisplay.data_t, self.maindisplay.data_f[:,n]) for n in range(self.nb_sm)]
+			#map(lambda n: self.maindisplay.curves_phase[n].setData(self.maindisplay.data_t, self.maindisplay.data_p[:,n]), range(self.nb_nodes))
+			#map(lambda n: self.maindisplay.curves_freq[n].setData(self.maindisplay.data_t, self.maindisplay.data_f[:,n]), range(self.nb_sm))
 			
 		self.timer = QTimer()
 		self.timer.timeout.connect( partial( updateInProc, self, q))
@@ -65,12 +67,11 @@ class MainDisplay(pg.GraphicsWindow):
 		self.p_phase = self.addPlot(title="Phase plot", row = 0, col=1)
 		self.p_freq = self.addPlot(title="Frequency plot", row = 1, col=1)
 	
-		# For faster plotting uncomment the Autorange lines
-		
-		self.p_phase.disableAutoRange(axis= 'y')
-		self.p_phase.setYRange(-1, 1)
+		# Uncomment to activate autorange plots
+		#self.p_phase.disableAutoRange(axis= 'y')
+		#self.p_phase.setYRange(-1, 1)
 		self.p_freq.disableAutoRange(axis= 'y')
-		self.p_freq.setYRange(-0.4,0.4)
+		self.p_freq.setYRange(-0.5,0.5)
 		
 		self.p_network = self.addViewBox(rowspan = 2, col=0)
 		self.p_graph = LabeledGraph()
