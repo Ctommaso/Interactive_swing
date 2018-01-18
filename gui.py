@@ -5,7 +5,7 @@ import numpy as np
 from graphs import *
 from functools import partial
 from dialog_ui import Dialog_edge, Dialog_node
-
+from helper_fcts import *
 
 class GuiThread(QThread):
 	def __init__(self, el_net, proc_ev):
@@ -41,14 +41,12 @@ class GuiThread(QThread):
 			
 			[self.maindisplay.curves_phase[n].setData(self.maindisplay.data_t, self.maindisplay.data_p[:,n]) for n in range(self.nb_nodes)]
 			[self.maindisplay.curves_freq[n].setData(self.maindisplay.data_t, self.maindisplay.data_f[:,n]) for n in range(self.nb_sm)]
-			#map(lambda n: self.maindisplay.curves_phase[n].setData(self.maindisplay.data_t, self.maindisplay.data_p[:,n]), range(self.nb_nodes))
-			#map(lambda n: self.maindisplay.curves_freq[n].setData(self.maindisplay.data_t, self.maindisplay.data_f[:,n]), range(self.nb_sm))
-			
+						
 		self.timer = QTimer()
 		self.timer.timeout.connect( partial( updateInProc, self, q))
 		self.timer.start(1)
-		self.exec_()
-		
+		self.start()
+
 
 class MainDisplay(pg.GraphicsWindow):
 
@@ -127,8 +125,8 @@ def onClick(mouse_ev, el_net, proc_ev, p_network):
 	y = p_network.mapSceneToView(mouse_ev.pos()).y(),
 	
 	# Find id and min distance
-	node_id, min_node_dist = closest_distance(node_X,node_Y,x,y)
-	edge_id, min_edge_dist = closest_distance(edge_X,edge_Y,x,y)
+	node_id, min_node_dist = shortest_distance(node_X,node_Y,x,y)
+	edge_id, min_edge_dist = shortest_distance(edge_X,edge_Y,x,y)
 
 	if min_node_dist < min_edge_dist:
 		Dialog_node(el_net.graph.nodes[node_id], proc_ev)
@@ -138,9 +136,3 @@ def onClick(mouse_ev, el_net, proc_ev, p_network):
 		Dialog_edge(el_net.graph[e[0]][e[1]], line_name, proc_ev)
 	print "You just opened the entry dialog window!!! you are awesome!!!"
 
-
-def closest_distance(X,Y,x,y):
-	euclidean_distance = (X-x)**2+(Y-y)**2
-	idx = np.nanargmin(euclidean_distance)
-	min_dist = euclidean_distance[idx]
-	return idx, min_dist
