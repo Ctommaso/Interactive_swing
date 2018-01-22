@@ -82,7 +82,7 @@ def swing_eq(rk_state, el_network):
 	# frequency_sm ordered according to sm_id
 	phase_diff = (I.transpose()).dot(rk_state[0:nb_nodes])
 	sin_phase_diff = np.sin(phase_diff)
-	delta_P = P - (I * susc).dot(sin_phase_diff)
+	delta_P = P - (I.dot(susc)).dot(sin_phase_diff)
 	
 	# rk_state = [theta, frequency_sm]
 	delta_phase = np.zeros(nb_nodes)

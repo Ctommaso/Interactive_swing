@@ -7,6 +7,7 @@ from functools import partial
 from dialog_ui import Dialog_edge, Dialog_node
 from helper_fcts import *
 
+
 class GuiThread(QThread):
 	def __init__(self, el_net, proc_ev):
 		QThread.__init__(self)
@@ -136,3 +137,56 @@ def onClick(mouse_ev, el_net, proc_ev, p_network):
 		Dialog_edge(el_net.graph[e[0]][e[1]], line_name, proc_ev)
 	print "You just opened the entry dialog window!!! you are awesome!!!"
 
+
+
+class MainDisplay2(pg.GraphicsWindow):
+
+	def __init__(self, el_net, proc_ev):
+		
+		super(MainDisplay2, self).__init__()
+		self.init_ui(el_net, proc_ev)
+
+	# initalize my gui window	
+	def init_ui(self, el_net, proc_ev):
+		self.resize(2000,1000)
+		self.setWindowTitle('Interacting swing dynamics')
+		self.el_net = el_net
+		
+		# Add items to the gui window
+		self.p_phase = self.addPlot(title="Phase plot", row = 0, col=1)
+		self.p_freq = self.addPlot(title="Frequency plot", row = 1, col=1)
+	
+		# Uncomment to activate autorange plots
+		#self.p_phase.disableAutoRange(axis= 'y')
+		#self.p_phase.setYRange(-1, 1)
+		self.p_freq.disableAutoRange(axis= 'y')
+		self.p_freq.setYRange(-0.5,0.5)
+		
+		self.p_network = self.addViewBox(rowspan = 2, col=0)
+		self.p_graph = LabeledGraph()
+		self.p_network.addItem(self.p_graph)
+	
+		# Plotting electrical network
+		pos = el_net.node_coord
+		adj = np.array([[e[0],e[1]] for e in el_net.graph.edges])
+		labels = np.array([el_net.graph.nodes[n]['name'] for n in el_net.graph.nodes])
+		symbols = ['s' if el_net.graph.nodes[n]['sm'] else 'o' for n in el_net.graph.nodes]
+		self.p_graph.setData(pos = pos, adj = adj, size = 20, symbol = symbols, text = labels)
+		
+		## plot arrows
+		line_flows = relative_line_load(el_net)
+		
+		for l in line_flows:
+			arrow = pg.ArrowItem(angle = l['angle'], tipAngle = 45, headLen= 10, tailLen=0, pen={'color': 'w', 'width': 1}, brush = 'y')
+			arrow.setPos(*l['pos'])
+			arrow_label = pg.TextItem("{0:.0f}%".format(l['rel_load']))
+			arrow_label.setPos(*l['pos'])
+			self.p_network.addItem(arrow)
+			self.p_network.addItem(arrow_label)
+		
+		self.p_network.scene().sigMouseClicked.connect(lambda mouse_ev: onClick(mouse_ev, el_net, proc_ev, self.p_network))
+		self.show()
+	
+	def closeEvent(self, *args, **kwargs):
+		super(pg.GraphicsWindow, self).closeEvent(*args, **kwargs)
+		

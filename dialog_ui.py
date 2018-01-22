@@ -75,7 +75,7 @@ class Dialog_edge(QDialog):
 		# Entry forms
 		self.entry_susceptance = QLineEdit()
 		self.entry_susceptance.setText(str(edge["susceptance"]))
-		self.entry_susceptance.setValidator(QDoubleValidator())
+		self.entry_susceptance.setValidator(QDoubleValidator(0.01,10,2))
 		
 		self.entry_status = QCheckBox()
 		self.entry_status.setChecked(edge["status"])

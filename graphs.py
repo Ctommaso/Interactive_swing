@@ -58,3 +58,8 @@ class Electrical_network():
 	# edge susceptance, edge ordering is produced by graph.edges
 	def get_active_susceptance(self):
 		return diags([self.graph[e[0]][e[1]]['susceptance'] * int(self.graph[e[0]][e[1]]['status']) for e in self.graph.edges()])
+
+
+	# edge susceptance, edge ordering is produced by graph.edges
+	def get_susceptance(self):
+		return diags([self.graph[e[0]][e[1]]['susceptance'] for e in self.graph.edges()])
