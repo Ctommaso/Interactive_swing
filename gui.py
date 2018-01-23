@@ -42,7 +42,6 @@ class GuiThread(QThread):
 			[self.maindisplay.curves_phase[n].setData(self.maindisplay.data_t, self.maindisplay.data_p[:,n]) for n in range(self.nb_nodes)]
 			[self.maindisplay.curves_freq[n].setData(self.maindisplay.data_t, self.maindisplay.data_f[:,n]) for n in range(self.nb_sm)]
 			
-			#plot_line_flows(self.maindisplay.p_network, self.maindisplay.el_net)
 			self.maindisplay.p_lineflows.setData(self.maindisplay.el_net)
 						
 		self.timer = QTimer()
@@ -107,7 +106,6 @@ class LabeledGraph(GraphItem):
 				text_pos = (kwds['pos'][n][0], kwds['pos'][n][1])
 				text_item.setPos(*kwds['pos'][n])
 				text_item.setParentItem(self)
-		#self.text = kwds.pop('text', [])
 		self.text = kwds.pop('text', [])
 		GraphItem.setData(self, **self.data)
     
@@ -126,13 +124,16 @@ def onClick(mouse_ev, el_net, proc_ev, p_network):
 	edge_X, edge_Y = edge_pos[:,0], edge_pos[:,1]
 
 	# Retrieve mouse click position
-	x = p_network.mapSceneToView(mouse_ev.pos()).x(),
-	y = p_network.mapSceneToView(mouse_ev.pos()).y(),
+	x = p_network.mapToView(mouse_ev.scenePos()).x(),
+	y = p_network.mapToView(mouse_ev.scenePos()).y(),
 	
 	# Find id and min distance
 	node_id, min_node_dist = shortest_distance(node_X,node_Y,x,y)
 	edge_id, min_edge_dist = shortest_distance(edge_X,edge_Y,x,y)
-
+	
+	#print "NODE ID {}, NODE (x,y)= ({},{}), mouse (x, y) = ({},{})".format(node_id, node_X[node_id], node_Y[node_id], x, y)
+	print "mouse (x, y) = ({},{})".format(x, y)
+	
 	if min_node_dist < min_edge_dist:
 		Dialog_node(el_net.graph.nodes[node_id], proc_ev)
 	else:
@@ -142,8 +143,6 @@ def onClick(mouse_ev, el_net, proc_ev, p_network):
 	print "You just opened the entry dialog window!!! you are awesome!!!"
 
 
-
-	
 ## Plotting line flows
 class LineFlows():
 	
