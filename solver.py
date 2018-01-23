@@ -38,6 +38,8 @@ def RK(el_network, max_iter, time_step, queue, ev):
 		
 		queue.put([step * time_step, rk_state[0:nb_nodes], rk_state[nb_nodes:]])
 		time.sleep(0.05)
+		el_network.state.phase = rk_state[0:nb_nodes]
+		el_network.state.frequency[sm_id] = rk_state[nb_nodes:]
 		ev.wait()
 		#print "RK step", step
 		

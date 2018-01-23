@@ -42,6 +42,9 @@ class GuiThread(QThread):
 			
 			[self.maindisplay.curves_phase[n].setData(self.maindisplay.data_t, self.maindisplay.data_p[:,n]) for n in range(self.nb_nodes)]
 			[self.maindisplay.curves_freq[n].setData(self.maindisplay.data_t, self.maindisplay.data_f[:,n]) for n in range(self.nb_sm)]
+			
+			#plot_line_flows(self.maindisplay.p_network, self.maindisplay.el_net)
+			self.maindisplay.p_lineflows.setData(self.maindisplay.el_net)
 						
 		self.timer = QTimer()
 		self.timer.timeout.connect( partial( updateInProc, self, q))
@@ -82,8 +85,10 @@ class MainDisplay(pg.GraphicsWindow):
 		labels = np.array([el_net.graph.nodes[n]['name'] for n in el_net.graph.nodes])
 		symbols = ['s' if el_net.graph.nodes[n]['sm'] else 'o' for n in el_net.graph.nodes]
 		self.p_graph.setData(pos = pos, adj = adj, size = 20, symbol = symbols, text = labels)
-		
+	
+		self.p_lineflows = LineFlows(self.p_network, el_net)
 		self.p_network.scene().sigMouseClicked.connect(lambda mouse_ev: onClick(mouse_ev, el_net, proc_ev, self.p_network))
+	
 		self.show()
 	
 	def closeEvent(self, *args, **kwargs):
@@ -137,16 +142,36 @@ def onClick(mouse_ev, el_net, proc_ev, p_network):
 		Dialog_edge(el_net.graph[e[0]][e[1]], line_name, proc_ev)
 	print "You just opened the entry dialog window!!! you are awesome!!!"
 
-		
-## Plotting line flows
-def plot_line_flows(viewBox, el_net):
+
+
 	
-	line_flows = relative_line_load(el_net)
+## Plotting line flows
+class LineFlows():
+	
+	
+	def __init__(self, viewBox, el_net):
 		
-	for l in line_flows:
-		arrow = pg.ArrowItem(angle = l['angle'], tipAngle = 40, headLen= 10, tailLen=0, pen={'color': 'w', 'width': 1}, brush = 'y')
-		arrow.setPos(*l['pos'])
-		arrow_label = pg.TextItem("{0:.0f}%".format(l['rel_load']))
-		arrow_label.setPos(*l['pos'])
-		viewBox.addItem(arrow)
-		viewBox.addItem(arrow_label)
+		self.arrows = []
+		self.arrow_labels = []
+		self.line_flows = relative_line_load(el_net)
+		
+		for l in self.line_flows:
+			arrow = pg.ArrowItem(angle = l['angle'], tipAngle = 40, headLen= 10, tailLen=0, pen={'color': 'w', 'width': 1}, brush = 'y', pxMode = True)
+			arrow.setPos(*l['pos'])
+			arrow_label = pg.TextItem("{0:.0f}%".format(l['rel_load']))
+			arrow_label.setPos(*l['pos'])
+			viewBox.addItem(arrow)
+			viewBox.addItem(arrow_label)
+			self.arrows.append(arrow)
+			self.arrow_labels.append(arrow_label)
+	
+	
+	def setData(self, el_net):
+		
+		self.line_flows = relative_line_load(el_net)
+		
+		for n, l in enumerate(self.line_flows):
+			angle_rot = -self.arrows[n].opts['angle'] + l['angle']
+			self.arrows[n].rotate(angle_rot)
+			self.arrows[n].opts.update(angle = l['angle'])
+			self.arrow_labels[n].setText("{0:.0f}%".format(l['rel_load']))

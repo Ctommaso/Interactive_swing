@@ -18,7 +18,7 @@ def main():
 	proc_ev.set()
 	
 	# Create simulator istance
-	s = Simulator(el_net, RK, time_step = 3e-2, max_iter = 5000)
+	s = Simulator(el_net, RK, time_step = 5e-2, max_iter = 5000)
 	
 	# Queue for sharing data between threads
 	q = Queue()
