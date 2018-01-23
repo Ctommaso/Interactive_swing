@@ -1,4 +1,4 @@
-import sys
+from sys import exit, argv
 from gui import MainDisplay
 from graphs import Electrical_network
 from multiprocessing import Event
@@ -24,11 +24,11 @@ def main():
 
 	proc_ev = Event()
 	proc_ev.set()
-	app = QApplication(sys.argv)
+	app = QApplication(argv)
 	
 	# Create Main Display instance
 	test = MainDisplay(el_net, proc_ev)
-	sys.exit(app.exec_())
+	exit(app.exec_())
 	
 	
 if __name__ == "__main__":

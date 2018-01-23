@@ -1,7 +1,7 @@
-from PyQt4.QtGui import *
+from PyQt4.QtGui import QApplication
 from multiprocessing import Queue, Event
 from threading import Thread
-import sys
+from sys import argv, exit
 from graphs import *
 from solver import *
 from gui import *
@@ -24,7 +24,7 @@ def main():
 	q = Queue()
 
 	# Qt event loop 
-	app = QApplication(sys.argv)
+	app = QApplication(argv)
 	
 	# Simulation process
 	proc = Thread(target = s.start, args = (q, proc_ev))
@@ -37,7 +37,7 @@ def main():
 	proc.start()
 	gui_thread.display(q, proc_ev, plot_buffer = 250)
 	
-	sys.exit(app.exec_())
+	exit(app.exec_())
 	
 if __name__ == '__main__':
 	main()

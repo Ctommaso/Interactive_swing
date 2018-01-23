@@ -1,6 +1,5 @@
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-import pyqtgraph as pg
+from PyQt4.QtCore import QThread, QTimer
+from pyqtgraph import GraphicsWindow, GraphItem, TextItem, ArrowItem
 import numpy as np
 from graphs import *
 from functools import partial
@@ -52,7 +51,7 @@ class GuiThread(QThread):
 		self.start()
 
 
-class MainDisplay(pg.GraphicsWindow):
+class MainDisplay(GraphicsWindow):
 
 	def __init__(self, el_net, proc_ev):
 		
@@ -92,25 +91,25 @@ class MainDisplay(pg.GraphicsWindow):
 		self.show()
 	
 	def closeEvent(self, *args, **kwargs):
-		super(pg.GraphicsWindow, self).closeEvent(*args, **kwargs)
+		super(GraphicsWindow, self).closeEvent(*args, **kwargs)
 		
 	
 
-class LabeledGraph(pg.GraphItem):
+class LabeledGraph(GraphItem):
 	def __init__(self):
-		pg.GraphItem.__init__(self)
+		GraphItem.__init__(self)
         
 	def setData(self, **kwds):
 		self.data = kwds
 		if 'pos' in self.data:
 			for n in range(kwds['pos'].shape[0]):
-				text_item = pg.TextItem(kwds['text'][n])
+				text_item = TextItem(kwds['text'][n])
 				text_pos = (kwds['pos'][n][0], kwds['pos'][n][1])
 				text_item.setPos(*kwds['pos'][n])
 				text_item.setParentItem(self)
 		#self.text = kwds.pop('text', [])
 		self.text = kwds.pop('text', [])
-		pg.GraphItem.setData(self, **self.data)
+		GraphItem.setData(self, **self.data)
     
 	
 def onClick(mouse_ev, el_net, proc_ev, p_network):
@@ -156,9 +155,9 @@ class LineFlows():
 		self.line_flows = relative_line_load(el_net)
 		
 		for l in self.line_flows:
-			arrow = pg.ArrowItem(angle = l['angle'], tipAngle = 40, headLen= 10, tailLen=0, pen={'color': 'w', 'width': 1}, brush = 'y', pxMode = True)
+			arrow = ArrowItem(angle = l['angle'], tipAngle = 40, headLen= 10, tailLen=0, pen={'color': 'w', 'width': 1}, brush = 'y', pxMode = True)
 			arrow.setPos(*l['pos'])
-			arrow_label = pg.TextItem("{0:.0f}%".format(l['rel_load']))
+			arrow_label = TextItem("{0:.0f}%".format(l['rel_load']))
 			arrow_label.setPos(*l['pos'])
 			viewBox.addItem(arrow)
 			viewBox.addItem(arrow_label)
