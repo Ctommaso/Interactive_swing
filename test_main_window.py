@@ -1,5 +1,5 @@
 import sys
-from gui import MainDisplay, MainDisplay2
+from gui import MainDisplay, plot_line_flows
 from graphs import Electrical_network
 from multiprocessing import Event
 from PyQt4.QtGui import QApplication
@@ -25,8 +25,11 @@ def main():
 	proc_ev = Event()
 	proc_ev.set()
 	app = QApplication(sys.argv)
-	#test = MainDisplay(el_net, proc_ev)
-	test = MainDisplay2(el_net, proc_ev)
+	
+	# Create Main Display instance
+	test = MainDisplay(el_net, proc_ev)
+	# Add to the main display the line flows
+	plot_line_flows(test.p_network, el_net)
 	sys.exit(app.exec_())
 	
 	
