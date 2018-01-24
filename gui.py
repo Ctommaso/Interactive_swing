@@ -131,9 +131,6 @@ def onClick(mouse_ev, el_net, proc_ev, p_network):
 	node_id, min_node_dist = shortest_distance(node_X,node_Y,x,y)
 	edge_id, min_edge_dist = shortest_distance(edge_X,edge_Y,x,y)
 	
-	#print "NODE ID {}, NODE (x,y)= ({},{}), mouse (x, y) = ({},{})".format(node_id, node_X[node_id], node_Y[node_id], x, y)
-	print "mouse (x, y) = ({},{})".format(x, y)
-	
 	if min_node_dist < min_edge_dist:
 		Dialog_node(el_net.graph.nodes[node_id], proc_ev)
 	else:

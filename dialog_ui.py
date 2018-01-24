@@ -1,4 +1,4 @@
-from PyQt4.QtGui import *
+from PyQt4.QtGui import QDialog, QLineEdit, QFormLayout, QPushButton, QDoubleValidator, QCheckBox
 from functools import partial
 
 
