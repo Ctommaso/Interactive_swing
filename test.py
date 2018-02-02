@@ -5,13 +5,13 @@ from sys import argv, exit
 from graphs import *
 from solver import *
 from gui import *
-from sample_networks import buses1, lines1
+from sample_networks import buses_r, lines_r
 
 
 def main():
 
 	# Load electrical network
-	el_net = Electrical_network(buses1, lines1)
+	el_net = Electrical_network(buses_r, lines_r)
 	
 	# Event for synchrony between threads
 	proc_ev = Event()
