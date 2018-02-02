@@ -51,11 +51,19 @@ lines_r =[(0,2,{'susceptance':3.0, 'status':True}),(0,4,{'susceptance':3.0, 'sta
 
 
 # Simple four node Complete graph
-buses_c = [(0, {'name':"Gen 0", 'coord': [0.00, 0.00], 'sm': True, 'power': 1.0,'inertia':1, 'damping':0.5}),
-          (1, {'name': "Gen 1", 'coord': [0.00, 0.10], 'sm': True, 'power': 0.5, 'inertia':1, 'damping':0.5}),
-          (2, {'name': "Load 2", 'coord': [0.10, 0.00], 'sm': True, 'power':-1.2, 'inertia':1, 'damping':0.5}),
-          (3, {'name': "Load 3", 'coord': [0.10, 0.10], 'sm': True, 'power':-0.3, 'inertia':1, 'damping':0.5})]
+buses_c = [(0, {'name':"Gen 0",  'coord': [-0.10, 0.00], 'sm': True, 'power': 1.0,'inertia':1, 'damping':0.5}),
+          (1, {'name': "Gen 1",  'coord': [ 0.10, 0.00], 'sm': True, 'power': 0.5, 'inertia':1, 'damping':0.5}),
+          (2, {'name': "Load 2", 'coord': [-0.20, 0.10], 'sm': True, 'power':-1.2, 'inertia':1, 'damping':0.5}),
+          (3, {'name': "Load 3", 'coord': [ 0.20, 0.10], 'sm': True, 'power':-0.3, 'inertia':1, 'damping':0.5}),
+          (4, {'name': "Load 4", 'coord': [-0.10, 0.20], 'sm': True, 'power':-0.5, 'inertia':1, 'damping':0.5}),
+          (5, {'name': "Gen 5",  'coord': [ 0.10, 0.20], 'sm': True, 'power': 0.5, 'inertia':1, 'damping':0.5})]
 
 lines_c =[(0,1,{'susceptance':1.0, 'status':True}),(0,2,{'susceptance':1.0, 'status':True}),(0,3,{'susceptance':1.0, 'status':True}),
-          (1,2,{'susceptance':1.0, 'status':True}),(1,3,{'susceptance':1.0, 'status':True}),(2,3,{'susceptance':1.0, 'status':True})]
+          (0,4,{'susceptance':1.0, 'status':True}),(0,5,{'susceptance':1.0, 'status':True}),(1,2,{'susceptance':1.0, 'status':True})]
+          (1,3,{'susceptance':1.0, 'status':True}),(1,4,{'susceptance':1.0, 'status':True}),(1,5,{'susceptance':1.0, 'status':True})]
+          (2,3,{'susceptance':1.0, 'status':True}),(2,4,{'susceptance':1.0, 'status':True}),(2,5,{'susceptance':1.0, 'status':True})]
+          (3,4,{'susceptance':1.0, 'status':True}),(3,5,{'susceptance':1.0, 'status':True}),(4,5,{'susceptance':1.0, 'status':True})]
+
+
+
 
