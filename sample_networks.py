@@ -59,9 +59,9 @@ buses_c = [(0, {'name':"Gen 0",  'coord': [-0.10, 0.00], 'sm': True, 'power': 1.
           (5, {'name': "Gen 5",  'coord': [ 0.10, 0.20], 'sm': True, 'power': 0.5, 'inertia':1, 'damping':0.5})]
 
 lines_c =[(0,1,{'susceptance':1.0, 'status':True}),(0,2,{'susceptance':1.0, 'status':True}),(0,3,{'susceptance':1.0, 'status':True}),
-          (0,4,{'susceptance':1.0, 'status':True}),(0,5,{'susceptance':1.0, 'status':True}),(1,2,{'susceptance':1.0, 'status':True})]
-          (1,3,{'susceptance':1.0, 'status':True}),(1,4,{'susceptance':1.0, 'status':True}),(1,5,{'susceptance':1.0, 'status':True})]
-          (2,3,{'susceptance':1.0, 'status':True}),(2,4,{'susceptance':1.0, 'status':True}),(2,5,{'susceptance':1.0, 'status':True})]
+          (0,4,{'susceptance':1.0, 'status':True}),(0,5,{'susceptance':1.0, 'status':True}),(1,2,{'susceptance':1.0, 'status':True}),
+          (1,3,{'susceptance':1.0, 'status':True}),(1,4,{'susceptance':1.0, 'status':True}),(1,5,{'susceptance':1.0, 'status':True}),
+          (2,3,{'susceptance':1.0, 'status':True}),(2,4,{'susceptance':1.0, 'status':True}),(2,5,{'susceptance':1.0, 'status':True}),
           (3,4,{'susceptance':1.0, 'status':True}),(3,5,{'susceptance':1.0, 'status':True}),(4,5,{'susceptance':1.0, 'status':True})]
 
 
