@@ -1,6 +1,6 @@
-from PyQt4.QtGui import QDialog, QLineEdit, QFormLayout, QPushButton, QDoubleValidator, QCheckBox
+from PyQt4.QtGui import QDialog, QLineEdit, QFormLayout, QPushButton, QDoubleValidator, QCheckBox, QFileDialog
 from functools import partial
-
+import pickle
 
 class Dialog_node(QDialog):
 
@@ -110,3 +110,12 @@ class Dialog_edge(QDialog):
 		QDialog.closeEvent(self,*args, **kwargs)
 		self.proc_ev.set()
 		print "You just closed the edge-dialog window, simulation can continue!!!"
+
+
+# Dialog window to select networks
+def dialog_load_network():
+
+	fname = QFileDialog.getOpenFileName(None,'Open file')
+	print fname, type(fname)
+	
+	return pickle.load(open(fname, "rb"))

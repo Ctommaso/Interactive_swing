@@ -1,17 +1,24 @@
 from PyQt4.QtGui import QApplication
+from dialog_ui import dialog_load_network
 from multiprocessing import Queue, Event
 from threading import Thread
 from sys import argv, exit
 from graphs import *
 from solver import *
 from gui import *
-from sample_networks import buses_r, lines_r
 
 
 def main():
 
-	# Load electrical network
-	el_net = Electrical_network(buses_r, lines_r)
+	# Qt event loop 
+	app = QApplication(argv)
+
+	# Load network data
+	buses, lines = dialog_load_network()
+	
+	# Construct electrical network
+	el_net = Electrical_network(buses, lines)
+	print "CREATED THE GRAPH"
 	
 	# Event for synchrony between threads
 	proc_ev = Event()
@@ -23,8 +30,7 @@ def main():
 	# Queue for sharing data between threads
 	q = Queue()
 
-	# Qt event loop 
-	app = QApplication(argv)
+	
 	
 	# Simulation process
 	proc = Thread(target = s.start, args = (q, proc_ev))
@@ -38,6 +44,6 @@ def main():
 	gui_thread.display(q, proc_ev, plot_buffer = 250)
 	
 	exit(app.exec_())
-	
+
 if __name__ == '__main__':
 	main()
