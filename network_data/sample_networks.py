@@ -65,7 +65,6 @@ lines_c =[(0,1,{'susceptance':1.0, 'status':True}),(0,2,{'susceptance':1.0, 'sta
           (3,4,{'susceptance':1.0, 'status':True}),(3,5,{'susceptance':1.0, 'status':True}),(4,5,{'susceptance':1.0, 'status':True})]
 
 
-
 # Devil network 
 buses_d = [(0, {'name':"Load 0",  'coord': [-0.10, 0.00], 'sm': True, 'power': -1.05,'inertia':1,  'damping':0.5}),
            (1, {'name': "Gen 1",  'coord': [ 0.00, 0.20], 'sm': True, 'power':  2.10, 'inertia':1, 'damping':0.5}),

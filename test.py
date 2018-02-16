@@ -10,6 +10,7 @@ from gui import *
 
 def main():
 
+	
 	# Qt event loop 
 	app = QApplication(argv)
 
@@ -18,7 +19,6 @@ def main():
 	
 	# Construct electrical network
 	el_net = Electrical_network(buses, lines)
-	print "CREATED THE GRAPH"
 	
 	# Event for synchrony between threads
 	proc_ev = Event()
@@ -29,8 +29,6 @@ def main():
 	
 	# Queue for sharing data between threads
 	q = Queue()
-
-	
 	
 	# Simulation process
 	proc = Thread(target = s.start, args = (q, proc_ev))

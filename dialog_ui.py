@@ -1,6 +1,7 @@
 from PyQt4.QtGui import QDialog, QLineEdit, QFormLayout, QPushButton, QDoubleValidator, QCheckBox, QFileDialog
 from functools import partial
-import pickle
+from os import getcwd, path
+import pickle, os
 
 class Dialog_node(QDialog):
 
@@ -112,10 +113,15 @@ class Dialog_edge(QDialog):
 		print "You just closed the edge-dialog window, simulation can continue!!!"
 
 
+
 # Dialog window to select networks
 def dialog_load_network():
-
-	fname = QFileDialog.getOpenFileName(None,'Open file')
-	print fname, type(fname)
 	
-	return pickle.load(open(fname, "rb"))
+	dir_name = 'network_data'
+		
+	if path.isdir(dir_name) == False:
+		dir_name = getcwd()
+
+	fname = QFileDialog.getOpenFileName(None,'Load Electic Network', directory = dir_name, filter = "Network files *.pkl")
+
+	return pickle.load(open(fname, "rb")) if os.path.isfile(fname) else dialog_load_network()
