@@ -127,7 +127,7 @@ def dialog_load_network():
 	try:
 		assert(os.path.exists(f_name))
 	except AssertionError:
-		sys.exit(' *** No file selcted *** ')
+		sys.exit(' *** No file selected *** ')
 	
 	return pickle.load(open(f_name, "rb"))
 
