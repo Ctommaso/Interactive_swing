@@ -35,8 +35,6 @@ lines1 =[(0,1,{'susceptance':2.0, 'status':True}),(0,2,{'susceptance':1.0, 'stat
          (8,9,{'susceptance':4.0, 'status':True}),(9,10,{'susceptance':3.0, 'status':True})]
 
 
-
-# Same as buses but all nodes are synchrnous machines
 # Radial network example
 buses_r = [(0, {'name': "Gen 0", 'coord': [0.00,  0.00], 'sm': True, 'power': 5.5, 'inertia':1, 'damping':0.5}),
           (1, {'name': "Gen 1", 'coord': [-0.30, 0.00], 'sm': True, 'power': 0.5, 'inertia':1, 'damping':0.5}),
