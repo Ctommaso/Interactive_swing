@@ -1,66 +1,70 @@
-from pandas import ExcelFile, isnull
 import sys
 
-def load_xlsx(fn):
+def load_csv(fn):
 	
 	try:
-		assert(fn.split('.')[-1] == 'xlsx')
+		assert(fn.split('.')[-1] == 'csv')
 	except AssertionError:
-		sys.exit("Selected file is not  *.xlsx")
-	
-	# Load Excel data
-	data = ExcelFile(fn)
-	
-	# Retrieve sheet names
-	sheet_name = data.sheet_names
-	
-	# Test that both 'lines' and 'buses' sheets exist
-	try:
-		assert('lines' in sheet_name)
-	except AssertionError:
-		sys.exit("Network .xlsx file does not contain lines sheet")
+		sys.exit("Selected file is not  *.csv")
 
-	try:
-		assert('buses' in sheet_name)
-	except AssertionError:
-		sys.exit("Network .xlsx file does not contain buses sheet")
+	f = open(fn, "r")
+	text_lines = iter(f.readlines())
+	f.close()
 
+	bus_section = "### buses"
+	line_section = "### lines"
+	empty_line = "\n"
 
-	# Parse sheets
-	bus_df = data.parse('buses')
-	line_df = data.parse('lines')
-		
-	# Float conversions
-	line_df['susceptance'] = line_df['susceptance'].astype('float')
+	in_bus_section = False
+	in_line_section = False
 
-	# Conversion to Boolean variables
-	bus_df['sm'].replace({1: True, 0: False}, inplace = True)
-	line_df['status'].replace({1: True, 0: False}, inplace = True)
-	
-	
-	lines = []
-	for n in range(line_df.shape[0]):
-		l = line_df.iloc[n]
-		lines.append((l['from'], l['to'], {'susceptance': l['susceptance'], 'status': l['status']}))
-	
-	
 	buses = []
-	for n in range(bus_df.shape[0]):
-		b = bus_df.iloc[n]
+	lines = []
+
+	for l in text_lines:
 		
-		bus_id = b['id']
-		bus_dict = {}
-		bus_dict['name'] = b['name']
-		bus_dict['coord'] = [b['coord_x'], b['coord_y']]
-		bus_dict['sm'] = b['sm']
-		bus_dict['power'] = b['power']
-		bus_dict['damping'] = b['damping']
-		if isnull(b['inertia']) == False:
-			bus_dict['inertia'] = b['inertia'] 
+		if l.startswith(bus_section):
+			in_bus_section = True
+			in_line_section = False
+			continue
+			
+		if l.startswith(line_section):
+			in_bus_section = False
+			in_line_section = True
+			continue
 		
-		buses.append( (bus_id, bus_dict) )
-	 
+		if l.startswith(empty_line):
+			continue
+		
+		if in_bus_section:
+			
+			data = l.split(',')
+			
+			bus_id = int(data[0])
+			
+			bus_dict = {}
+			bus_dict['name'] = data[1]
+			bus_dict['coord'] = [float(data[2]), float(data[3])]
+			bus_dict['sm'] = bool(int(data[4]))
+			bus_dict['power'] = float(data[5])
+			bus_dict['damping'] = float(data[6])
+			try:
+				bus_dict['inertia'] = float(data[7])
+			except ValueError:
+				pass
+			
+			buses.append( (bus_id, bus_dict) )
+		
+		if in_line_section:
+			
+			data = l.split(',')
+			
+			source = int(data[0])
+			sink = int(data[1])
+			
+			line_dict = {}
+			line_dict['susceptance'] = float(data[2])
+			line_dict['status'] = bool(int(data[3]))
+			lines.append((source, sink, line_dict))
+		
 	return buses, lines
-	
-if __name__ == "__main__":
-	load_xlsx()

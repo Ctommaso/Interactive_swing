@@ -3,7 +3,7 @@ from functools import partial
 from os import getcwd, path
 import os, sys
 import importlib
-from load_data import load_xlsx
+from load_data import load_csv
 
 
 class Dialog_node(QDialog):
@@ -125,11 +125,11 @@ def dialog_load_network():
 	if path.isdir(dir_name) == False:
 		dir_name = getcwd()
 
-	f_name = QFileDialog.getOpenFileName(None,'Load Electic Network', directory = dir_name, filter = "Network files *.xlsx")
+	f_name = QFileDialog.getOpenFileName(None,'Load Electic Network', directory = dir_name, filter = "Network files *.csv")
 	
 	try:
 		assert(os.path.exists(f_name))
 	except AssertionError:
 		sys.exit(' *** No file selected *** ')
 	
-	return load_xlsx(str(f_name))
+	return load_csv(str(f_name))
