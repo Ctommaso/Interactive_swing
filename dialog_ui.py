@@ -1,7 +1,9 @@
 from PyQt4.QtGui import QDialog, QLineEdit, QFormLayout, QPushButton, QDoubleValidator, QCheckBox, QFileDialog
 from functools import partial
 from os import getcwd, path
-import pickle, os, sys
+import os, sys
+import importlib
+from load_data import load_xlsx
 
 class Dialog_node(QDialog):
 
@@ -122,12 +124,11 @@ def dialog_load_network():
 	if path.isdir(dir_name) == False:
 		dir_name = getcwd()
 
-	f_name = QFileDialog.getOpenFileName(None,'Load Electic Network', directory = dir_name, filter = "Network files *.pkl")
-
+	f_name = QFileDialog.getOpenFileName(None,'Load Electic Network', directory = dir_name, filter = "Network files *.xlsx")
+	
 	try:
 		assert(os.path.exists(f_name))
 	except AssertionError:
 		sys.exit(' *** No file selected *** ')
 	
-	return pickle.load(open(f_name, "rb"))
-
+	return load_xlsx(str(f_name))
