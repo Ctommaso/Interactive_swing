@@ -1,0 +1,11 @@
+### buses: id,name,coord_x,coord_y,sm (True:1, False:0),power,damping,inertia
+0,Load 0,-0.1,0.0,1,-1.25,0.5,1
+1,Gen 1,0.0,0.2,1,2.5,0.5,1
+2,Load 2,0.1,0.0,1,-1.25,0.5,1	
+
+
+### lines: from,to,susceptance,status (True:1, False:0)
+0,1,3.5,1 
+1,2,3.5,1 
+
+
