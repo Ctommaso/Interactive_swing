@@ -2,7 +2,7 @@ from PyQt4.QtGui import QApplication
 from dialog_ui import dialog_load_network
 from multiprocessing import Queue, Event
 from threading import Thread
-from sys import argv, exit
+from sys import argv, exit, modules
 from graphs import *
 from solver import *
 from gui import *
@@ -10,7 +10,6 @@ from gui import *
 
 def main():
 
-	
 	# Qt event loop 
 	app = QApplication(argv)
 

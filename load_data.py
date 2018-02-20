@@ -1,4 +1,4 @@
-import pandas as pd
+from pandas import ExcelFile, isnull
 import sys
 
 def load_xlsx(fn):
@@ -9,7 +9,7 @@ def load_xlsx(fn):
 		sys.exit("Selected file is not  *.xlsx")
 	
 	# Load Excel data
-	data = pd.ExcelFile(fn)
+	data = ExcelFile(fn)
 	
 	# Retrieve sheet names
 	sheet_name = data.sheet_names
@@ -55,7 +55,7 @@ def load_xlsx(fn):
 		bus_dict['sm'] = b['sm']
 		bus_dict['power'] = b['power']
 		bus_dict['damping'] = b['damping']
-		if pd.isnull(b['inertia']) == False:
+		if isnull(b['inertia']) == False:
 			bus_dict['inertia'] = b['inertia'] 
 		
 		buses.append( (bus_id, bus_dict) )

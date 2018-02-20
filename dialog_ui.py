@@ -5,6 +5,7 @@ import os, sys
 import importlib
 from load_data import load_xlsx
 
+
 class Dialog_node(QDialog):
 
 	def __init__(self, node, proc_ev):
