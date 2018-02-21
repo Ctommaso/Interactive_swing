@@ -8,8 +8,6 @@ from solver import *
 from gui import *
 
 
-import numpy as np
-
 def main():
 
 	# Qt event loop 
@@ -41,14 +39,6 @@ def main():
 	# Start simulation and gui threads
 	proc.start()
 	gui_thread.display(q, proc_ev, plot_buffer = 250)
-	
-	mod = []
-	for m in modules.keys():
-		mod.append(m.split('.')[0])
-	mod = np.array(mod)
-	unique, counts = np.unique(mod, return_counts=True)
-	perm = np.argsort(counts)
-	print np.concatenate((unique[perm].reshape(-1,1), counts[perm].reshape(-1,1)), axis =1)
 	
 	exit(app.exec_())
 

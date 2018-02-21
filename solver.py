@@ -8,11 +8,11 @@ class Simulator():
 	
 	inputs: electrical network object,
 	        integer max_iterations, 
-	        fct for time integration time_integrator,
-	        simulator state paused True/False
+	        fct for time integration time_integrator
+	        time integrator time step
 	"""
 	
-	def __init__(self, el_network, time_integrator , max_iter = 1e6, time_step = 1e-2, paused = True):
+	def __init__(self, el_network, time_integrator , max_iter = 1e6, time_step = 1e-2):
 		self.max_iter = max_iter
 		self.time_integrator = time_integrator
 		self.el_network = el_network
