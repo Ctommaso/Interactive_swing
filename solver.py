@@ -40,8 +40,10 @@ def RK(el_network, max_iter, time_step, queue, ev):
 		time.sleep(0.05)
 		el_network.state.phase = rk_state[0:nb_nodes]
 		el_network.state.frequency[sm_id] = rk_state[nb_nodes:]
+		
+		# wait() method blocks until the flag is true
 		ev.wait()
-		#print "RK step", step
+		
 		
 		# 4th order Runge Kutta (1st order DE)
 		k1 = time_step * swing_eq(rk_state, el_network)
