@@ -4,9 +4,12 @@ Simple electric network dynamic simulator for interactive transient visualizatio
 
 The folder "/network_data" contains a non exhausitve set of sample networks (in *.csv format) to choose from.
 
+To run: "python swing_app.py"
+
 Runs on: Python 2.7
 
-Python module requirements:
+Module requirements:
+
 numpy = 1.14.0
 scipy = 0.17.0
 networkx = 2.0
