@@ -38,7 +38,7 @@ def load_csv(fn):
 		
 		if in_bus_section:
 			
-			data = l.split(',')
+			data = l.split('\t')
 			
 			bus_id = int(data[0])
 			
@@ -57,7 +57,7 @@ def load_csv(fn):
 		
 		if in_line_section:
 			
-			data = l.split(',')
+			data = l.split('\t')
 			
 			source = int(data[0])
 			sink = int(data[1])
